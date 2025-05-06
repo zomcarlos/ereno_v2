@@ -5,17 +5,15 @@
   </component>
   <component name="ArtifactsWorkspaceSettings">
     <artifacts-to-build>
-      <artifact name="ERENO:war exploded" />
+      <artifact name="IDS:jar" />
     </artifacts-to-build>
   </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5dc2c3e3-b182-4ce1-b90c-b522e5d13c0c" name="Changes" comment="ERENINHO. All use cases done. There is a bug on UC02.">
+    <list default="true" id="5dc2c3e3-b182-4ce1-b90c-b522e5d13c0c" name="Changes" comment="ERENINHO. All use cases done (the bug on UC02 was fixed).">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/br/ufu/facom/ereno/attacks/uc02/creator/InverseReplayCretor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/ufu/facom/ereno/attacks/uc02/creator/InverseReplayCretor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/br/ufu/facom/ereno/dataExtractors/ARFFWritter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/ufu/facom/ereno/dataExtractors/ARFFWritter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/br/ufu/facom/ereno/evaluation/DatasetEval.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/ufu/facom/ereno/evaluation/DatasetEval.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/br/ufu/facom/ereno/scenarios/SamambaiaScenario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/ufu/facom/ereno/scenarios/SamambaiaScenario.java" afterDir="false" />
     </list>
@@ -49,6 +47,18 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;sequincozes&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/sequincozes/ereno.git&quot;,
+    &quot;accountId&quot;: &quot;eaa5d615-90b6-456b-a4c5-e410eb95b4e3&quot;
+  }
+}</component>
   <component name="LogFilters">
     <option name="FILTER_ERRORS" value="false" />
     <option name="FILTER_WARNINGS" value="false" />
@@ -58,6 +68,13 @@
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
+      </MavenGeneralSettings>
+    </option>
   </component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
@@ -73,36 +90,41 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;extract.method.default.visibility&quot;: &quot;private&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Silvio/Downloads/Trabalho1/Trabalho1&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Application.DatasetEval.executor": "Run",
+    "Application.SamambaiaScenario.executor": "Run",
+    "Application.VagnerEval.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "extract.method.default.visibility": "private",
+    "git-widget-placeholder": "concurrent__usecases",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/Silvio/IdeaProjects/ereno/src/main/java/br/ufu/facom/ereno/evaluation",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Artifacts",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "project.propCompiler",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Silvio\IdeaProjects\ereno\src\main\java\br\ufu\facom\ereno\evaluation" />
       <recent name="C:\Users\Silvio\IdeaProjects\ereno\src\main\java\br\ufu\facom\ereno\attacks\uc04\creator" />
       <recent name="C:\Users\Silvio\IdeaProjects\ereno\src\main\java\br\ufu\facom\ereno\attacks\uc04" />
       <recent name="C:\Users\Silvio\IdeaProjects\ereno\src\main\java\br\ufu\facom\ereno\attacks" />
       <recent name="C:\Users\Silvio\IdeaProjects\ereno\src\main\java\br\ufu\facom\ereno\datasetEvaluation\abstractclassification" />
-      <recent name="C:\Users\Silvio\IdeaProjects\ereno\src\main\java\br\ufu\facom\ereno\datasetEvaluation" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/main/java/br/ufu/facom/ereno/attacks/uc02/" />
@@ -119,7 +141,7 @@
       <recent name="br.ufu.facom.ereno.utils" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.DatasetEval">
+  <component name="RunManager" selected="Application.SamambaiaScenario">
     <configuration name="DatasetEval" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="br.ufu.facom.ereno.evaluation.DatasetEval" />
       <module name="ERENO" />
@@ -159,8 +181,18 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="teste.jsp" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:8080/ERENO_war_exploded/teste.jsp">
-      <method v="2" />
+    <configuration name="VagnerEval" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="br.ufu.facom.ereno.evaluation.VagnerEval" />
+      <module name="ERENO" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="br.ufu.facom.ereno.evaluation.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
     <configuration name="Tomcat 9.0.64" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 9.0.64" ALTERNATIVE_JRE_ENABLED="true" ALTERNATIVE_JRE_PATH="11">
       <option name="BROWSER_ID" value="98ca6316-2f89-46d9-a9e5-fa9e2b0625b3" />
@@ -291,22 +323,30 @@
       </method>
     </configuration>
     <list>
+      <item itemvalue="Application.VagnerEval" />
       <item itemvalue="Application.SamambaiaScenario" />
       <item itemvalue="Application.DatasetEval" />
       <item itemvalue="Application.MultiSource" />
-      <item itemvalue="JavaScript Debug.teste.jsp" />
       <item itemvalue="Tomcat Server.Tomcat 9.0.64" />
       <item itemvalue="Tomcat Server.index.jsp" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.DatasetEval" />
         <item itemvalue="Application.SamambaiaScenario" />
+        <item itemvalue="Application.DatasetEval" />
+        <item itemvalue="Application.VagnerEval" />
         <item itemvalue="Application.MultiSource" />
         <item itemvalue="Tomcat Server.index.jsp" />
-        <item itemvalue="JavaScript Debug.teste.jsp" />
       </list>
     </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.23726.103" />
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.23726.103" />
+      </set>
+    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -404,7 +444,19 @@
       <workItem from="1712785806357" duration="600000" />
       <workItem from="1713988893096" duration="21000" />
       <workItem from="1714574911107" duration="22658000" />
-      <workItem from="1714622296164" duration="7245000" />
+      <workItem from="1714622296164" duration="8924000" />
+      <workItem from="1714634549900" duration="329000" />
+      <workItem from="1714751753124" duration="2314000" />
+      <workItem from="1715096377683" duration="929000" />
+      <workItem from="1715963123689" duration="1142000" />
+      <workItem from="1719596960426" duration="20000" />
+      <workItem from="1719856613454" duration="811000" />
+      <workItem from="1720396819777" duration="62000" />
+      <workItem from="1736440188444" duration="5184000" />
+      <workItem from="1736446233374" duration="6223000" />
+      <workItem from="1736616345587" duration="1209000" />
+      <workItem from="1745101976568" duration="2136000" />
+      <workItem from="1746209251800" duration="1823000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <created>1658677919676</created>
@@ -749,7 +801,7 @@
       <option name="project" value="LOCAL" />
       <updated>1685733209617</updated>
     </task>
-    <option name="localTasksCounter" value="73" />
+    <option name="localTasksCounter" value="74" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -768,7 +820,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Refactoring legacy UC05 to novel architecture ." />
     <MESSAGE value="Refactoring legacy UC06 and UC07 to novel architecture ." />
     <MESSAGE value="Minor adjusts in UC01." />
     <MESSAGE value="English and portuguese support." />
@@ -793,7 +844,8 @@
     <MESSAGE value="All UCs reviewed." />
     <MESSAGE value="ERENO Without IDS." />
     <MESSAGE value="ERENINHO. All use cases done. There is a bug on UC02." />
-    <option name="LAST_COMMIT_MESSAGE" value="ERENINHO. All use cases done. There is a bug on UC02." />
+    <MESSAGE value="ERENINHO. All use cases done (the bug on UC02 was fixed)." />
+    <option name="LAST_COMMIT_MESSAGE" value="ERENINHO. All use cases done (the bug on UC02 was fixed)." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
