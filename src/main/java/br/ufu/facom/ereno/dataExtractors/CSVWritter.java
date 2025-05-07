@@ -12,7 +12,7 @@ import java.util.PriorityQueue;
 import java.util.logging.Logger;
 
 /**
- * This extractor writes the generated messages to an ARFF file.
+ * This extractor writes the generated messages to an CSV file.
  * It generates a GOOSE-oriented dataset (one sample per GOOSE).
  */
 public class CSVWritter {
@@ -30,7 +30,7 @@ public class CSVWritter {
 
         // temporario
         int contador= 10; // REMOVER DEPOIS DOS TESTES
-        Logger.getLogger("ARFFWritter").info(stationBusMessages.size() + " mensagens na fila.");
+        Logger.getLogger("CSVWritter").info(stationBusMessages.size() + " mensagens na fila.");
         while (!stationBusMessages.isEmpty()) {
             Goose goose = (Goose) stationBusMessages.poll();
             if (previousGoose != null) { // skips the first message
@@ -39,11 +39,10 @@ public class CSVWritter {
                 String cycleStrig = ProtocolCorrelation.getCorrespondingSVFrameCycle(processBusMessages, goose, 80).asCsv();
                 String gooseString = goose.asCSVFull();
 
-                System.out.println("svString: "+svString); // REMOVER DEPOIS DOS TESTES
-                contador = contador - 1; // REMOVER DEPOIS DOS TESTES
-                if(contador==0){ // REMOVER DEPOIS DOS TESTES
-                break;// REMOVER DEPOIS DOS TESTES
-                } // REMOVER DEPOIS DOS TESTES
+//                contador = contador - 1; // REMOVER DEPOIS DOS TESTES
+//                if(contador==0){ // REMOVER DEPOIS DOS TESTES
+//                break;// REMOVER DEPOIS DOS TESTES
+//                } // REMOVER DEPOIS DOS TESTES
                 String gooseConsistency = IntermessageCorrelation.getConsistencyFeaturesAsCSV(goose, previousGoose);
 
                 double delay = goose.getTimestamp() - sv.getTime();

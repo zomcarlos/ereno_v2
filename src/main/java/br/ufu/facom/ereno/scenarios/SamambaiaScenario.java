@@ -11,14 +11,12 @@ import br.ufu.facom.ereno.attacks.uc05.devices.InjectorIED;
 import br.ufu.facom.ereno.attacks.uc06.devices.HighStNumInjectorIED;
 import br.ufu.facom.ereno.attacks.uc07.devices.HighRateStNumInjectorIED;
 import br.ufu.facom.ereno.attacks.uc08.devices.GrayHoleVictimIED;
-import br.ufu.facom.ereno.benign.uc00.Input;
 import br.ufu.facom.ereno.benign.uc00.devices.LegitimateProtectionIED;
 import br.ufu.facom.ereno.benign.uc00.devices.MergingUnit;
 import br.ufu.facom.ereno.SubstationNetwork;
 import br.ufu.facom.ereno.dataExtractors.ARFFWritter;
 import br.ufu.facom.ereno.dataExtractors.CSVWritter;
 import br.ufu.facom.ereno.dataExtractors.DebugWritter;
-import br.ufu.facom.ereno.evaluation.DatasetEval;
 import br.ufu.facom.ereno.general.IED;
 import br.ufu.facom.ereno.general.ProtectionIED;
 import br.ufu.facom.ereno.messages.Goose;
@@ -66,7 +64,7 @@ public class SamambaiaScenario implements IScenario {
     public void setupDevices() {
         // Initializing MU
 //        MergingUnit mu = new MergingUnit(Input.singleElectricalSourceFile);
-        MergingUnit mu = new MergingUnit(Input.electricalSourceFiles);
+        MergingUnit mu = new MergingUnit(InputFilesForSV.electricalSourceFiles);
 //        mu.enableRandomOffsets(numberOfMessages);
         substationNetwork.processLevelDevices.add(mu);
 
@@ -110,8 +108,8 @@ public class SamambaiaScenario implements IScenario {
         substationNetwork.bayLevelDevices.add(uc00);
 //        substationNetwork.bayLevelDevices.add(uc01);
 //        substationNetwork.bayLevelDevices.add(uc02);
-        substationNetwork.bayLevelDevices.add(uc03);
-        substationNetwork.bayLevelDevices.add(uc04);
+//        substationNetwork.bayLevelDevices.add(uc03);
+//        substationNetwork.bayLevelDevices.add(uc04);
 //        substationNetwork.bayLevelDevices.add(uc05);
 //        substationNetwork.bayLevelDevices.add(uc06);
 //        substationNetwork.bayLevelDevices.add(uc07);
@@ -164,7 +162,8 @@ public class SamambaiaScenario implements IScenario {
                     ARFFWritter.processDataset(substationNetwork.stationBusMessages, substationNetwork.processBusMessages);
                     ARFFWritter.finishWriting();
                 } else {
-                    CSVWritter.startWriting("/home/silvio/datasets/dataset.csv");
+                    CSVWritter.startWriting("E:\\ereno dataset\\ereninho\\dataset.arff");
+//                    CSVWritter.startWriting("/home/silvio/datasets/dataset.csv");
                     CSVWritter.processDataset(substationNetwork.stationBusMessages, substationNetwork.processBusMessages);
                     CSVWritter.finishWriting();
                 }

@@ -5,7 +5,6 @@ import br.ufu.facom.ereno.api.GooseFlow;
 import br.ufu.facom.ereno.api.SetupIED;
 import br.ufu.facom.ereno.attacks.uc03.devices.MasqueradeFakeFaultIED;
 import br.ufu.facom.ereno.attacks.uc04.devices.MasqueradeFakeNormalED;
-import br.ufu.facom.ereno.benign.uc00.Input;
 import br.ufu.facom.ereno.attacks.uc01.devices.RandomReplayerIED;
 import br.ufu.facom.ereno.attacks.uc02.devices.InverseReplayerIED;
 import br.ufu.facom.ereno.attacks.uc05.devices.InjectorIED;
@@ -15,6 +14,7 @@ import br.ufu.facom.ereno.attacks.uc08.devices.GrayHoleVictimIED;
 import br.ufu.facom.ereno.benign.uc00.devices.LegitimateProtectionIED;
 import br.ufu.facom.ereno.benign.uc00.devices.MergingUnit;
 import br.ufu.facom.ereno.general.ProtectionIED;
+import br.ufu.facom.ereno.scenarios.InputFilesForSV;
 
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -132,7 +132,7 @@ public class MultiSource {
     }
 
     public static MergingUnit runMU() {
-        MergingUnit mu = new MergingUnit(Input.electricalSourceFiles);
+        MergingUnit mu = new MergingUnit(InputFilesForSV.electricalSourceFiles);
 //        MergingUnit mu = new MergingUnit(Input.singleElectricalSourceFile);
         mu.enableRandomOffsets(numberOfMessages);
         mu.run(numberOfMessages * 4763);

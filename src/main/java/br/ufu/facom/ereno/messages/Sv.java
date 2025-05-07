@@ -1,6 +1,7 @@
 package br.ufu.facom.ereno.messages;
 
 public class Sv extends EthernetFrame {
+    float relativeness = 0;// to compensate GOOSE relative (for resource efficiency purpose)
     float time;
     float iA;
     float iB;
@@ -14,7 +15,7 @@ public class Sv extends EthernetFrame {
         return getTime() + "," + getiA() + "," + getiB() + "," + getiC() + "," + getvA() + "," + getvB() + "," + getvC();
     }
 
-    public String getCSVHeader(){
+    public String getCSVHeader() {
         return "time, iA, iB, iC, vA, vB, vC";
     }
 
@@ -42,15 +43,20 @@ public class Sv extends EthernetFrame {
     @Override
     public String toString() {
         if (status == null) {
-            return time + "," + iA + "," + iB + "," + iC + "," + vA + "," + vB + "," + vC;
+            return relativeness + time + "," + iA + "," + iB + "," + iC + "," + vA + "," + vB + "," + vC;
         } else {
-            return time + "," + iA + "," + iB + "," + iC + "," + vA + "," + vB + "," + status;
+            return relativeness + time + "," + iA + "," + iB + "," + iC + "," + vA + "," + vB + "," + status;
         }
     }
 
     public float getTime() {
-        return time;
+        return relativeness + time;
     }
+
+    public void setRelativeness(int relativeness) {
+        this.relativeness = relativeness;
+    }
+
 
     public void setTime(float time) {
         this.time = time;

@@ -12,6 +12,8 @@ import java.util.logging.Logger;
 
 import static br.ufu.facom.ereno.api.GooseFlow.ECF.numberOfMessages;
 
+// @TODO: Needs documentation for this class: what is its purpose? -- potentially a legacy class?
+
 public class GSVDatasetWriter extends DatasetWriter {
     public static int writeNormal(Goose seedMessage, ArrayList<Goose> gooseMessages, ArrayList<Sv> svMessages, boolean printHeader) throws IOException {
         /* Write Header and Columns */
