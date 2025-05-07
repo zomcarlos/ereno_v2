@@ -14,8 +14,7 @@ public class SVCreator implements MessageCreator {
     private float offset = 0;
     private final String[] payloadFiles;
     private MergingUnit mu; // This is the samambaia (sb) substation MU
-    private ArrayList<Float[]> allElectricalMeassures;
-    String columnsTitle[] = {
+    String[] columnsTitle = {
             "Time",
             "isbA", "isbB", "isbC",  // Current substation Samambaia
             "ismA", "ismB", "ismC",  // Current substation Serra da mesa
@@ -30,12 +29,14 @@ public class SVCreator implements MessageCreator {
     public void generate(IED ied, int numberOfSVMessages) {
         this.mu = (MergingUnit) ied;
 
-        this.allElectricalMeassures = consumeFloatFiles(payloadFiles, 1, columnsTitle);
+        ArrayList<Float[]> allElectricalMeassures = parseElectricalMeasurementsFromCsv(payloadFiles, 1, columnsTitle);
 
         Logger.getLogger("SVCreator.generate()").info("Generating " + numberOfSVMessages + " SV message.");
         Logger.getLogger("SVCreator.generate()").info(+allElectricalMeassures.size() + " lines available.");
         int countMessages = 0;
         while (mu.getMessages().size() < numberOfSVMessages) {
+            System.out.println(mu.getMessages().size()+" < "+numberOfSVMessages);
+
             for (Float[] lines : allElectricalMeassures) {
                 countMessages = countMessages + 1;
                 if (countMessages % 4763 == 0) {
@@ -53,7 +54,7 @@ public class SVCreator implements MessageCreator {
         }
     }
 
-    protected ArrayList<Float[]> consumeFloatFiles(String files[], int scale, String columns[]) {
+    protected ArrayList<Float[]> parseElectricalMeasurementsFromCsv(String[] files, int scale, String columns[]) {
         ArrayList<Float[]> formatedCSVFile = new ArrayList<>();
 
         for (String file : files) {

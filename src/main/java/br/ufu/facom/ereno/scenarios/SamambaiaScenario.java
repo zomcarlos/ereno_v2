@@ -34,7 +34,6 @@ public class SamambaiaScenario implements IScenario {
     public static void main(String[] args) throws Exception {
         SamambaiaScenario scenario = new SamambaiaScenario();
         scenario.run();
-        DatasetEval.main(new String[]{});
     }
 
     SubstationNetwork substationNetwork;
@@ -126,7 +125,8 @@ public class SamambaiaScenario implements IScenario {
     public void runDevices() {
         // Generating SV messages
         for (MergingUnit mu : substationNetwork.processLevelDevices) {
-            mu.run(numberOfMessages * 4763);
+            mu.run(numberOfMessages); // Do not repeat SV now, delegate it to the generation step
+//            mu.run(numberOfMessages * 4763); // For each GOOSE message, there are about to 4800 SV messages
             for (Sv sv : mu.getMessages()) {
                 substationNetwork.processBusMessages.add(sv);
             }
@@ -164,7 +164,7 @@ public class SamambaiaScenario implements IScenario {
                     ARFFWritter.processDataset(substationNetwork.stationBusMessages, substationNetwork.processBusMessages);
                     ARFFWritter.finishWriting();
                 } else {
-                    CSVWritter.startWriting("E:\\ereno dataset\\ereninho\\csv\\masquerades.csv");
+                    CSVWritter.startWriting("/home/silvio/datasets/dataset.csv");
                     CSVWritter.processDataset(substationNetwork.stationBusMessages, substationNetwork.processBusMessages);
                     CSVWritter.finishWriting();
                 }

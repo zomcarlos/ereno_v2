@@ -109,9 +109,18 @@ public class ProtocolCorrelation {
         int index = -1;
         double gooseTimestamp = goose.getTimestamp();
 
+
+        // To fix the excessive (redundant) SV message generation
+        int intGTS= (int) gooseTimestamp;
+        System.out.println("intGTS: "+intGTS + "/ gooseTimestamp"+gooseTimestamp);
+        gooseTimestamp = gooseTimestamp - intGTS;
+        double svTime = 0;
+        /// end
+
+
         while (low <= high) {
             int mid = (low + high) >>> 1; // equivalent to (low + high) / 2, but more efficient.
-            double svTime = ((Sv) svs.get(mid)).getTime();
+            svTime = ((Sv) svs.get(mid)).getTime();
 
             if (svTime < gooseTimestamp) {
                 index = mid; // Found a candidate, but continue searching for a closer candidate.
@@ -135,6 +144,7 @@ public class ProtocolCorrelation {
         SVCycle cycle = new SVCycle(cycleMsgs);
         cycle.computeMetrics();
 
+        System.out.println(goose.getTimestamp()+"/fixed: "+gooseTimestamp + " / SV:"+svTime + "/");
 
         return cycle; // an invalid index will be returned if no SV messages are available before the given GOOSE
     }

@@ -28,6 +28,8 @@ public class CSVWritter {
 //        for (EthernetFrame gooseFrame : stationBusMessages) {
 //            Goose goose = (Goose) gooseFrame;
 
+        // temporario
+        int contador= 10;
         Logger.getLogger("ARFFWritter").info(stationBusMessages.size() + " mensagens na fila.");
         while (!stationBusMessages.isEmpty()) {
             Goose goose = (Goose) stationBusMessages.poll();
@@ -36,6 +38,12 @@ public class CSVWritter {
                 String svString = sv.asCsv();
                 String cycleStrig = ProtocolCorrelation.getCorrespondingSVFrameCycle(processBusMessages, goose, 80).asCsv();
                 String gooseString = goose.asCSVFull();
+
+                System.out.println("svString: "+svString);
+                contador = contador - 1;
+                if(contador==0){
+                break;
+                }
                 String gooseConsistency = IntermessageCorrelation.getConsistencyFeaturesAsCSV(goose, previousGoose);
                 double delay = goose.getTimestamp() - sv.getTime();
                 write(svString + "," + cycleStrig + "," + gooseString + "," + gooseConsistency + "," + delay + "," + goose.getLabel());

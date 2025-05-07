@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 public class MergingUnit extends IED {
     protected ArrayList<Sv> messages;
 
-    String payloadFiles[];
+    String[] payloadFiles;
 
     public MergingUnit(String[] payloadFiles) {
         this.messages = new ArrayList<>();
