@@ -28,7 +28,6 @@ import java.util.logging.Logger;
 
 public class SamambaiaScenario implements IScenario {
 
-
     public static void main(String[] args) throws Exception {
         SamambaiaScenario scenario = new SamambaiaScenario();
         scenario.run();
@@ -184,7 +183,7 @@ public class SamambaiaScenario implements IScenario {
                     ARFFWritter.processDataset(substationNetwork.stationBusMessages, substationNetwork.processBusMessages);
                     ARFFWritter.finishWriting();
                 } else {
-                    CSVWritter.startWriting(path + datasetName + ".csv");
+                    CSVWritter.startWriting(path+datasetName+".csv");
                     CSVWritter.processDataset(substationNetwork.stationBusMessages, substationNetwork.processBusMessages);
                     CSVWritter.finishWriting();
                 }
