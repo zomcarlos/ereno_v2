@@ -39,10 +39,8 @@ public abstract class IED {
         }
 
         Random random = new Random(System.nanoTime());
-        int randomNumber = lowerLimit + random.nextInt(upperLimit - lowerLimit + 1);
-        System.out.println("random: " + randomNumber);
 
-        return randomNumber;
+        return lowerLimit + random.nextInt(upperLimit - lowerLimit + 1);
     }
 
 
@@ -52,13 +50,14 @@ public abstract class IED {
         }
 
         Random random = new Random(System.nanoTime());
-        double randomNumber = lowerLimit + (upperLimit - lowerLimit) * random.nextDouble();
-        return randomNumber;
+        return lowerLimit + (upperLimit - lowerLimit) * random.nextDouble();
     }
 
     abstract public void run(int messageCount);
 
     public abstract void addMessage(EthernetFrame message);
+
+    public abstract void removeMessage(EthernetFrame message);
 
     public float getInitialTimestamp() {
         return initialTimestamp;

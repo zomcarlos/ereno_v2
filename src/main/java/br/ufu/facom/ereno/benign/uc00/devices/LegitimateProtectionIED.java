@@ -6,16 +6,15 @@
 package br.ufu.facom.ereno.benign.uc00.devices;
 
 
-import br.ufu.facom.ereno.general.ProtectionIED;
 import br.ufu.facom.ereno.api.GooseFlow;
 import br.ufu.facom.ereno.api.SetupIED;
 import br.ufu.facom.ereno.benign.uc00.creator.GooseCreator;
+import br.ufu.facom.ereno.dataExtractors.DatasetWriter;
+import br.ufu.facom.ereno.general.ProtectionIED;
 import br.ufu.facom.ereno.messages.EthernetFrame;
 import br.ufu.facom.ereno.messages.Goose;
-import br.ufu.facom.ereno.dataExtractors.DatasetWriter;
 
 import java.util.ArrayList;
-import java.util.logging.Logger;
 
 /**
  * @author silvio
@@ -56,6 +55,11 @@ public class LegitimateProtectionIED extends ProtectionIED {
     @Override
     public void addMessage(EthernetFrame periodicGoose) {
         this.messages.add((Goose) periodicGoose);
+    }
+
+    @Override
+    public void removeMessage(EthernetFrame periodicGoose) {
+        this.messages.remove((Goose) periodicGoose);
     }
 
     public void addMessages(ArrayList<Goose> messages) {
@@ -180,7 +184,7 @@ public class LegitimateProtectionIED extends ProtectionIED {
     }
 
     public ArrayList<Goose> copyMessages() {
-        Logger.getLogger("copyMessage").info("Copying " + messages.size() + " messages.");
+//        Logger.getLogger("copyMessage").info("Copying " + messages.size() + " messages.");
         ArrayList<Goose> copied = new ArrayList<>();
         for (Goose originalGoose : messages) {
             copied.add(originalGoose.copy());

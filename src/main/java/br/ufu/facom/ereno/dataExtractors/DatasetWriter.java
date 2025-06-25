@@ -15,7 +15,7 @@ public class DatasetWriter {
     static BufferedWriter bw;
     public static boolean english = false;
     static boolean replace = true;
-    public static String[] label = {"normal", "random_replay", "inverse_replay", "masquerade_fake_fault", "masquerade_fake_normal", "injection", "high_StNum", "poisoned_high_rate", "grayhole"};//, "stealthy_injection"};//,"poisoned_high_rate_consistent"};
+    public static String[] label = {"normal", "random_replay", "inverse_replay", "masquerade_fake_fault", "masquerade_fake_normal", "injection", "high_StNum", "poisoned_high_rate", "grayhole", "orientedGrayhole"};//, "stealthy_injection"};//,"poisoned_high_rate_consistent"};
 
     public static class Debug {
         public static boolean gooseMessages = false;

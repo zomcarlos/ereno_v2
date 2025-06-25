@@ -84,6 +84,11 @@ public class ProtectionIED extends IED {
         }
     }
 
+    @Override
+    public void removeMessage(EthernetFrame periodicGoose) {
+        this.messages.remove((Goose) periodicGoose);
+    }
+
 
     public double[] exponentialBackoff(long minTime, long maxTime, double intervalMultiplier) {
         long retryIntervalMs = minTime;

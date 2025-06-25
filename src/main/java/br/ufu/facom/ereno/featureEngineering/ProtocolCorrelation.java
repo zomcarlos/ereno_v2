@@ -10,42 +10,54 @@ import java.util.logging.Logger;
 public class ProtocolCorrelation {
 
 
+    /**
+     * Finds the closest SV message to the given GOOSE timestamp.
+     * @param svs List of SV messages (must be non-null and non-empty)
+     * @param goose GOOSE message to correlate (must be non-null)
+     * @return Closest SV message or null if no suitable message found
+     * @throws IllegalArgumentException if inputs are invalid
+     */
+
+
     public static Sv getCorrespondingSVFrame(ArrayList<EthernetFrame> svs, Goose goose) {
-        int low = 0;
-        int high = svs.size() - 1;
-        int index = -1;
+        // Validate inputs
+        if (svs == null || goose == null) {
+            throw new IllegalArgumentException("Input parameters cannot be null");
+        }
+        if (svs.isEmpty()) {
+            Logger.getLogger(ProtocolCorrelation.class.getName())
+                    .warning("Empty SV messages list");
+            return null;
+        }
+
+        // Get adjusted timestamps
         double gooseTimestamp = goose.getTimestamp();
-
-        // To fix the excessive (redundant) SV message generation
         int intGTS = (int) gooseTimestamp;
-        double relativeGooseTimestamp = gooseTimestamp - intGTS;
-        double svTime = 0;
-        // end
-        while (low <= high) {
-            int mid = (low + high) >>> 1; // Equivalente a (low + high) / 2, mas mais eficiente.
-            Sv svMessage = (Sv) svs.get(mid);
-            svMessage.setRelativeness(intGTS);
-            svTime = (svMessage).getTime();
 
-            if (svTime < gooseTimestamp) {
-                index = mid; // Found a candidate, but continue searching for a closer candidate.
-                low = mid + 1; // Try to find a SV time closer to GOOSE Timestamp.
-            } else {
-                // If the SV time is equal or higher, looks to the inferior part.
-                high = mid - 1;
+        // Find closest SV
+        Sv closestSv = null;
+        double minTimeDiff = Double.MAX_VALUE;
+
+        for (EthernetFrame frame : svs) {
+            if (!(frame instanceof Sv)) continue;
+
+            Sv sv = (Sv) frame;
+            sv.setRelativeness(intGTS);
+            double timeDiff = Math.abs(sv.getTime() - gooseTimestamp);
+
+            if (timeDiff < minTimeDiff) {
+                minTimeDiff = timeDiff;
+                closestSv = sv;
             }
         }
 
-        if (index >= 0) {
-            Sv svMessage = (Sv) svs.get(index);
-            svMessage.setRelativeness(intGTS);
-            return svMessage; // an invalid index will be returned if no SV messages are available before the given GOOSE
-        } else {
-            String errorMsg = "gooseTimestamp: " + gooseTimestamp + "/ svTime:" + svTime;
-            throw new IndexOutOfBoundsException(errorMsg);
+        if (closestSv == null) {
+            Logger.getLogger(ProtocolCorrelation.class.getName())
+                    .warning("No valid SV messages found for GOOSE timestamp: " + gooseTimestamp);
         }
-    }
 
+        return closestSv;
+    }
     public static SVCycle getCorrespondingSVFrameCycle(ArrayList<EthernetFrame> svs, Goose goose, int numCycleMsgs) {
         int low = 0;
         int high = svs.size() - 1;

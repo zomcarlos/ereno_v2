@@ -30,6 +30,11 @@ public class MergingUnit extends IED {
         this.messages.add((Sv) message);
     }
 
+    @Override
+    public void removeMessage(EthernetFrame message) {
+        this.messages.remove((Sv) message);
+    }
+
 
     public ArrayList<Sv> getMessages() {
         return messages;
