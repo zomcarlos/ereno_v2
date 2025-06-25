@@ -10,7 +10,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
-import static br.ufu.facom.ereno.api.GooseFlow.ECF.numberOfMessages;
+import static br.ufu.facom.ereno.api.GooseFlow.numberOfMessages;
 
 // @TODO: Needs documentation for this class: what is its purpose? -- potentially a legacy class?
 

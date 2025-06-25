@@ -9,4 +9,6 @@ public interface IScenario {
     void runDevices();
 
     void exportDataset();
+
+    void loadConfiguration();
 }
