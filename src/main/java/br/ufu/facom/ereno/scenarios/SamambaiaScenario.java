@@ -1,5 +1,6 @@
 package br.ufu.facom.ereno.scenarios;
 
+import br.ufu.facom.ereno.SubstationNetwork;
 import br.ufu.facom.ereno.api.Attacks;
 import br.ufu.facom.ereno.api.GooseFlow;
 import br.ufu.facom.ereno.api.SetupIED;
@@ -13,28 +14,34 @@ import br.ufu.facom.ereno.attacks.uc07.devices.HighRateStNumInjectorIED;
 import br.ufu.facom.ereno.attacks.uc08.devices.GrayHoleVictimIED;
 import br.ufu.facom.ereno.benign.uc00.devices.LegitimateProtectionIED;
 import br.ufu.facom.ereno.benign.uc00.devices.MergingUnit;
-import br.ufu.facom.ereno.SubstationNetwork;
 import br.ufu.facom.ereno.dataExtractors.ARFFWritter;
 import br.ufu.facom.ereno.dataExtractors.CSVWritter;
 import br.ufu.facom.ereno.dataExtractors.DebugWritter;
 import br.ufu.facom.ereno.general.IED;
 import br.ufu.facom.ereno.general.ProtectionIED;
 import br.ufu.facom.ereno.messages.Goose;
-import br.ufu.facom.ereno.messages.Sv;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 import java.util.logging.Logger;
 
-import static br.ufu.facom.ereno.api.GooseFlow.ECF.numberOfMessages;
-
 public class SamambaiaScenario implements IScenario {
+
 
     public static void main(String[] args) throws Exception {
         SamambaiaScenario scenario = new SamambaiaScenario();
         scenario.run();
     }
 
+    private static final String CONFIG_FILE = "params.properties";
+    private static final Properties props = new Properties();
     SubstationNetwork substationNetwork;
+    private static Boolean generateArff = false;
+    private static Boolean debug = false;
+    private static String path;
+    private static String datasetName;
+    private static int numberOfMessages;
 
     @Override
     public void run() {
@@ -46,25 +53,45 @@ public class SamambaiaScenario implements IScenario {
     }
 
     public void loadAllConfigs() {
-        Attacks.ECF.loadConfigs();
-        GooseFlow.ECF.loadConfigs();
-        SetupIED.ECF.loadConfigs();
-        Attacks.ECF.legitimate = true;
-        Attacks.ECF.randomReplay = true;
-        Attacks.ECF.masqueradeOutage = true;
-        Attacks.ECF.masqueradeDamage = true;
-        Attacks.ECF.randomInjection = true;
-        Attacks.ECF.inverseReplay = true;
-        Attacks.ECF.highStNum = true;
-        Attacks.ECF.flooding = true;
-        Attacks.ECF.grayhole = false;
+        Attacks.loadConfigs();
+        GooseFlow.loadConfigs();
+        SetupIED.loadConfigs();
+        Attacks.legitimate = true;
+        Attacks.randomReplay = true;
+        Attacks.masqueradeOutage = true;
+        Attacks.masqueradeDamage = true;
+        Attacks.randomInjection = true;
+        Attacks.inverseReplay = true;
+        Attacks.highStNum = true;
+        Attacks.flooding = true;
+        Attacks.grayhole = false;
+
+        try (InputStream input = GooseFlow.class.getClassLoader().getResourceAsStream(CONFIG_FILE)) {
+
+            if (input == null) {
+                throw new RuntimeException(CONFIG_FILE + " not found in classpath");
+            }
+
+            props.load(input);
+
+            // Map properties to static fields
+            generateArff = Boolean.parseBoolean(props.getProperty("scenario.generateArff", "false"));
+            debug = Boolean.parseBoolean(props.getProperty("scenario.debug", "false"));
+            path = props.getProperty("scenario.path");
+            datasetName = props.getProperty("scenario.datasetName");
+            numberOfMessages = Integer.parseInt(props.getProperty("goose.flow.numberOfMessages", "0"));
+
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to load configuration from " + CONFIG_FILE, e);
+        } catch (NumberFormatException e) {
+            throw new RuntimeException("Invalid number format in configuration", e);
+        }
+
     }
 
     @Override
     public void setupDevices() {
-        // Initializing MU
-//        MergingUnit mu = new MergingUnit(Input.singleElectricalSourceFile);
-        MergingUnit mu = new MergingUnit(InputFilesForSV.electricalSourceFiles);
+        MergingUnit mu = new MergingUnit(InputFilesForSV.getElectricalSourceFiles());
 //        mu.enableRandomOffsets(numberOfMessages);
         substationNetwork.processLevelDevices.add(mu);
 
@@ -123,11 +150,8 @@ public class SamambaiaScenario implements IScenario {
     public void runDevices() {
         // Generating SV messages
         for (MergingUnit mu : substationNetwork.processLevelDevices) {
-            mu.run(numberOfMessages); // Do not repeat SV now, delegate it to the generation step
-//            mu.run(numberOfMessages * 4763); // For each GOOSE message, there are about to 4800 SV messages
-            for (Sv sv : mu.getMessages()) {
-                substationNetwork.processBusMessages.add(sv);
-            }
+            mu.run(numberOfMessages);
+            substationNetwork.processBusMessages.addAll(mu.getMessages());
         }
 
         // Generating GOOSE messages
@@ -153,17 +177,14 @@ public class SamambaiaScenario implements IScenario {
 
     @Override
     public void exportDataset() {
-        boolean generate_arff = false; // CSV will be used in case this is set to false
-        boolean debug = false;
         try {
             if (!debug) {
-                if (generate_arff) {
-                    ARFFWritter.startWriting("E:\\ereno dataset\\ereninho\\multiclass_train.arff");
+                if (generateArff) {
+                    ARFFWritter.startWriting(path + datasetName + ".arff");
                     ARFFWritter.processDataset(substationNetwork.stationBusMessages, substationNetwork.processBusMessages);
                     ARFFWritter.finishWriting();
                 } else {
-                    CSVWritter.startWriting("E:\\ereno dataset\\ereninho\\dataset.arff");
-//                    CSVWritter.startWriting("/home/silvio/datasets/dataset.csv");
+                    CSVWritter.startWriting(path + datasetName + ".csv");
                     CSVWritter.processDataset(substationNetwork.stationBusMessages, substationNetwork.processBusMessages);
                     CSVWritter.finishWriting();
                 }

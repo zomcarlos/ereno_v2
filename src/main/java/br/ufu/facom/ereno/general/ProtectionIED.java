@@ -23,8 +23,8 @@ public class ProtectionIED extends IED {
         this.label = label;
         messages = new ArrayList<>();
     }
-    private int initialStNum = Integer.parseInt(SetupIED.ECF.stNum);
-    private int initialSqNum = Integer.parseInt(SetupIED.ECF.sqNum);
+    private int initialStNum = Integer.parseInt(SetupIED.stNum);
+    private int initialSqNum = Integer.parseInt(SetupIED.sqNum);
     //    static double[] burstingInterval = {0.5, 0.6}; // timestam to p (in seconds)
     public static double delayFromEvent = 0.00631;
     double firstGooseTime = 0.01659;
@@ -38,9 +38,9 @@ public class ProtectionIED extends IED {
     }
 
     double initialBackoffInterval = 6.33000000000011f; // IED processing time
-    double minTime = Integer.parseInt(SetupIED.ECF.minTime);
-    long maxTime = Integer.parseInt(SetupIED.ECF.maxTime);
-    private boolean initialCbStatus = GooseFlow.ECF.cbstatus;
+    double minTime = Integer.parseInt(SetupIED.minTime);
+    long maxTime = Integer.parseInt(SetupIED.maxTime);
+    private boolean initialCbStatus = GooseFlow.cbstatus;
 
     protected ArrayList<Goose> messages;
     private String label = "normal";
@@ -77,7 +77,7 @@ public class ProtectionIED extends IED {
 
     @Override
     public void addMessage(EthernetFrame periodicGoose) {
-        if (GooseFlow.ECF.numberOfMessages >= messages.size()){
+        if (GooseFlow.numberOfMessages >= messages.size()){
             this.messages.add((Goose) periodicGoose);
         } else {
             Logger.getLogger("addMessage").warning("Adding more GOOSE than the predefined threshold. There is something wrong with your logic.");

@@ -19,7 +19,7 @@ public class SVCreator implements MessageCreator {
             "isbA", "isbB", "isbC",  // Current substation Samambaia
             "ismA", "ismB", "ismC",  // Current substation Serra da mesa
             "vsbA", "vsbB", "vsbC",  // Voltage Samambaia
-            "vsmA", "vsmB", "vsmC"}; // Voltage substation Serra da mesa
+            "vsmA", "vsmB", "vsmC", " "}; // Voltage substation Serra da mesa
 
     public SVCreator(String[] payloadFiles) {
         this.payloadFiles = payloadFiles;
