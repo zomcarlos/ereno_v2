@@ -9,6 +9,32 @@ import java.util.Properties;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Stream;
 
+/**
+ * Utility class for retrieving Sampled Values (SV) input files from a configured directory.
+ *
+ * Loads configuration from 'config.properties' in the classpath, including:
+ * - root.directory: the base directory to search for files
+ * - file.extension: filter files by this extension (default ".out")
+ * - max.depth: maximum directory depth to traverse (default unlimited)
+ *
+ * Uses parallel streams and a thread-safe collection for efficient file discovery.
+ *
+ * Provides methods to:
+ * - Get all electrical source files matching the configured criteria
+ * - Access configuration properties with or without default values
+ *
+ * Usage example:
+ * <pre>{@code
+ * String[] svFiles = InputFilesForSV.getElectricalSourceFiles();
+ * for (String file : svFiles) {
+ *     System.out.println(file);
+ * }
+ * }</pre>
+ *
+ * @see java.nio.file.Files
+ * @see java.util.stream.Stream
+ */
+
 public class InputFilesForSV {
     private static final Properties config = new Properties();
 
@@ -29,11 +55,6 @@ public class InputFilesForSV {
         }
     }
 
-    /**
-     * Gets all electrical source files using parallel stream for better performance
-     *
-     * @return Array of file paths
-     */
     public static String[] getElectricalSourceFiles() {
         String rootDir = config.getProperty("root.directory");
         String fileExtension = config.getProperty("file.extension", ".out");
@@ -43,26 +64,22 @@ public class InputFilesForSV {
             throw new RuntimeException("root.directory not specified in config.properties");
         }
 
-        // Using ConcurrentLinkedQueue for thread-safe collection in parallel stream
         ConcurrentLinkedQueue<String> fileQueue = new ConcurrentLinkedQueue<>();
 
         try (Stream<Path> pathStream = Files.walk(Paths.get(rootDir), maxDepth)) {
-            pathStream.parallel()  // Enable parallel processing
+            pathStream.parallel()
                     .filter(Files::isRegularFile).filter(p -> p.toString().toLowerCase().endsWith(fileExtension.toLowerCase())).forEach(p -> fileQueue.add(p.toString()));
         } catch (IOException e) {
             throw new RuntimeException("Error reading files from directory: " + rootDir, e);
         }
 
-        // Convert to array and sort (still needed as parallel processing doesn't guarantee order)
         return fileQueue.stream().sorted().toArray(String[]::new);
     }
 
-    // Helper method to get configuration
     public static String getConfig(String key) {
         return config.getProperty(key);
     }
 
-    // Helper method to get configuration with default value
     public static String getConfig(String key, String defaultValue) {
         return config.getProperty(key, defaultValue);
     }

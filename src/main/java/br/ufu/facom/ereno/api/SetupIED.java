@@ -8,11 +8,27 @@ import java.nio.file.Paths;
 import java.util.Properties;
 import java.util.logging.Logger;
 
+/**
+ * Central configuration handler for Intelligent Electronic Device (IED) settings.
+ *
+ * Manages core parameters for IED operation including:
+ * - Device identification (name, references)
+ * - Timing controls (min/max intervals)
+ * - Message sequencing (stNum, sqNum)
+ * - Dataset configurations
+ *
+ * Automatically loads defaults from {@code params.properties} and provides
+ * methods to persist changes or export as JSON. Serves as the
+ * single configuration source for IED instances across the system.
+ *
+ * @see br.ufu.facom.ereno.api.Attacks
+ * @see br.ufu.facom.ereno.api.GooseFlow
+ */
+
 public class SetupIED {
     private static final Logger logger = Logger.getLogger(SetupIED.class.getName());
     private static final Properties config = new Properties();
 
-    // Configuration parameters with defaults
     public static String iedName = "defaultIED";
     public static String gocbRef = "LD/LLN0$GO$gcbA";
     public static String datSet = "LD/LLN0$IntLockA";
@@ -37,7 +53,6 @@ public class SetupIED {
 
             config.load(input);
 
-            // Load properties, using defaults if not specified
             iedName = config.getProperty("ied.name", iedName);
             gocbRef = config.getProperty("ied.gocbRef", gocbRef);
             datSet = config.getProperty("ied.datSet", datSet);
@@ -54,7 +69,6 @@ public class SetupIED {
 
     public static void saveConfiguration() {
         try {
-            // Update properties with current values
             config.setProperty("ied.name", iedName);
             config.setProperty("ied.gocbRef", gocbRef);
             config.setProperty("ied.datSet", datSet);
@@ -64,14 +78,11 @@ public class SetupIED {
             config.setProperty("ied.stNum", stNum);
             config.setProperty("ied.sqNum", sqNum);
 
-            // Determine the path to the properties file
             Path configPath = Paths.get(System.getProperty("user.dir"),
                     "src", "main", "resources", "ied.properties");
 
-            // Create parent directories if they don't exist
             Files.createDirectories(configPath.getParent());
 
-            // Write the properties to file
             try (var writer = Files.newBufferedWriter(configPath)) {
                 config.store(writer, "IED Configuration");
                 logger.info("IED configuration saved successfully");

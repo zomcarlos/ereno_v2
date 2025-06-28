@@ -1,10 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.ufu.facom.ereno.general;
-
 
 import br.ufu.facom.ereno.api.GooseFlow;
 import br.ufu.facom.ereno.api.SetupIED;
@@ -16,8 +10,23 @@ import java.util.ArrayList;
 import java.util.logging.Logger;
 
 /**
- * @author silvio
+ * Represents a Protection Intelligent Electronic Device (IED) within a substation network simulation.
+ *
+ * This class extends IED and manages GOOSE message creation, periodic transmission,
+ * fault event simulation, retransmission strategies using exponential backoff, and message sequence
+ * management.
+ *
+ * It interacts with {@code Goose}, {@code GooseCreator}, and utilizes configuration from {@code SetupIED}
+ * and {@code GooseFlow}. The class also provides utility methods to handle message copies,
+ * previous message retrieval, and message timing controls.
+ *
+ * @see IED
+ * @see Goose
+ * @see GooseCreator
+ * @see SetupIED
+ * @see GooseFlow
  */
+
 public class ProtectionIED extends IED {
     public ProtectionIED(String label) {
         this.label = label;
@@ -54,7 +63,6 @@ public class ProtectionIED extends IED {
 
     @Override
     public void run(int numberOfPeriodicMessages) {
-        // Here we set the GooseCreator for creating GOOSE messages for ProtectionIED
         messageCreator = new GooseCreator(label);
         GooseCreator gc = (GooseCreator) messageCreator;
 
@@ -64,10 +72,10 @@ public class ProtectionIED extends IED {
             messageCreator.generate(this, numberOfPeriodicMessages / faultRate);
             double lastPeriodicMessage = copyMessages().get(getNumberOfMessages() - 1).getTimestamp();
             gc.reportEventAt(lastPeriodicMessage + 0.5); // fault at middle of the second
-            Logger.getLogger("ProtectionIED.run()").info("Reporting fault at " + lastPeriodicMessage + 0.5);
+//            Logger.getLogger("ProtectionIED.run()").info("Reporting fault at " + lastPeriodicMessage + 0.5);
             copyMessages().remove(getNumberOfMessages() - 1); // need to remove the message after 100ms
             gc.reportEventAt(lastPeriodicMessage + 0.6); // fault recovery 100ms later
-            Logger.getLogger("ProtectionIED.run()").info("Reporting normal operation at " + lastPeriodicMessage + 0.5);
+//            Logger.getLogger("ProtectionIED.run()").info("Reporting normal operation at " + lastPeriodicMessage + 0.5);
         }
 
         while (messages.size() - 1 > numberOfPeriodicMessages) {

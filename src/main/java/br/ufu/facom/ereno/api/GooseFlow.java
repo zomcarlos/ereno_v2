@@ -7,8 +7,18 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
 
+/**
+ * Manages GOOSE message flow parameters for IEC 61850 simulations.
+ *
+ * <p>Loads and saves configuration from {@code params.properties}, exposing
+ * Ethernet frame parameters, GOOSE identifiers, and protocol flags as static fields.</p>
+ *
+ * <p>Configuration is automatically loaded at class initialization.</p>
+ *
+ * @see br.ufu.facom.ereno.api.Attacks
+ */
+
 public class GooseFlow {
-    // Configuration parameters
     public static String goID;
     public static int numberOfMessages;
     public static String ethSrc;
@@ -27,9 +37,6 @@ public class GooseFlow {
         loadConfigs();
     }
 
-    /**
-     * Loads configuration from params.properties file
-     */
     public static void loadConfigs() {
         try (InputStream input = GooseFlow.class.getClassLoader()
                 .getResourceAsStream(CONFIG_FILE)) {
@@ -40,7 +47,6 @@ public class GooseFlow {
 
             props.load(input);
 
-            // Map properties to static fields
             goID = props.getProperty("goose.flow.goID");
             numberOfMessages = Integer.parseInt(props.getProperty("goose.flow.numberOfMessages", "0"));
             ethSrc = props.getProperty("goose.flow.ethSrc");
@@ -59,12 +65,8 @@ public class GooseFlow {
         }
     }
 
-    /**
-     * Saves current configuration to params.properties file
-     */
     public static void saveConfigs() {
         try {
-            // Update properties with current values
             props.setProperty("goose.flow.goID", goID != null ? goID : "");
             props.setProperty("goose.flow.numberOfMessages", String.valueOf(numberOfMessages));
             props.setProperty("goose.flow.ethSrc", ethSrc != null ? ethSrc : "");
@@ -76,11 +78,9 @@ public class GooseFlow {
             props.setProperty("goose.flow.test", String.valueOf(test));
             props.setProperty("goose.flow.cbstatus", String.valueOf(cbstatus));
 
-            // Get the path to the properties file in the same directory as config.properties
             Path configPath = Paths.get(System.getProperty("user.dir"),
                     "src", "main", "resources", CONFIG_FILE);
 
-            // Write the properties to file
             try (var writer = Files.newBufferedWriter(configPath)) {
                 props.store(writer, "Goose Flow Configuration");
             }

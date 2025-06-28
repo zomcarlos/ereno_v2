@@ -8,11 +8,22 @@ import java.nio.file.Paths;
 import java.util.Properties;
 import java.util.logging.Logger;
 
+/**
+ * Central configuration manager for power system attack scenarios.
+ *
+ * <p>This class loads and maintains activation flags for various attack types
+ * from the {@code attacks.properties} file and provides static boolean fields
+ * to toggle attacks in the simulation framework.</p>
+ *
+ * <p>Use {@link #loadConfigs()} to reload configuration and
+ * {@link #saveConfigs()} to persist changes.</p>
+ *
+ */
+
 public class Attacks {
     private static final Logger logger = Logger.getLogger(Attacks.class.getName());
     private static final Properties props = new Properties();
 
-    // Configuration parameters with defaults
     public static boolean legitimate = true;
     public static boolean randomReplay = false;
     public static boolean masqueradeOutage = false;
@@ -28,9 +39,6 @@ public class Attacks {
         loadConfigs();
     }
 
-    /**
-     * Loads configuration from attacks.properties file
-     */
     public static void loadConfigs() {
         try (InputStream input = Attacks.class.getClassLoader()
                 .getResourceAsStream("attacks.properties")) {
@@ -60,9 +68,6 @@ public class Attacks {
         }
     }
 
-    /**
-     * Saves current configuration to attacks.properties file
-     */
     public static void saveConfigs() {
         try {
             props.setProperty("attacks.legitimate", String.valueOf(legitimate));

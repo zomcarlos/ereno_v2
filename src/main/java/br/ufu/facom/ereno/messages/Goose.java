@@ -5,13 +5,25 @@ import java.io.InputStream;
 import java.util.Properties;
 
 /**
- * Represents a GOOSE message with terminal-only configuration
+ *
+ * This class extends {@code EthernetFrame} and encapsulates the parameters and behaviors of a GOOSE message
+ * used in substation communication protocols.
+ *
+ * It manages dynamically generated fields such as {@code cbStatus}, {@code stNum}, {@code sqNum}, and timestamps.
+ * Static configuration parameters are loaded from a properties file or defaulted otherwise.
+ *
+ * Provides methods to output message data in various CSV formats for analysis or processing, including
+ * full detailed output, compact versions, and masquerade attack simulations.
+ *
+ * Also supports copying instances, retrieving inverse statuses, and retrieving various length and size
+ * parameters related to the message frame.
+ *
+ * @see EthernetFrame
  */
+
 public class Goose extends EthernetFrame {
-    // Configuration parameters
     private static final Properties config = new Properties();
 
-    // Message fields
     private String label;
     private int cbStatus;                   // DYNAMICALLY GENERATED 
     private int stNum;                      // DYNAMICALLY GENERATED 
@@ -45,7 +57,6 @@ public class Goose extends EthernetFrame {
             if (input != null) {
                 config.load(input);
 
-                // Override defaults with configuration
                 ethDst = config.getProperty("goose.ethDst", ethDst);
                 ethSrc = config.getProperty("goose.ethSrc", ethSrc);
                 ethType = config.getProperty("goose.ethType", ethType);

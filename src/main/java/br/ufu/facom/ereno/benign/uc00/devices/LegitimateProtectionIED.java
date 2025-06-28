@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package br.ufu.facom.ereno.benign.uc00.devices;
 
 
@@ -17,8 +13,23 @@ import br.ufu.facom.ereno.messages.Goose;
 import java.util.ArrayList;
 
 /**
- * @author silvio
+ * Simulation model of a legitimate IEC 61850 Protection IED for benign scenarios (UC00).
+ *
+ * This class extends {@code ProtectionIED} and manages the creation, manipulation, and scheduling
+ * of GOOSE messages using a configured {@code GooseCreator}. It simulates realistic behavior by:
+ * - Generating event-driven and periodic GOOSE messages
+ * - Managing state and sequence numbers with optional randomization
+ * - Supporting exponential backoff retransmission intervals
+ * - Tracking control block status and internal timing offsets
+ *
+ * Provides utilities for copying, retrieving, and analyzing GOOSE message flows,
+ * making it suitable for testing protection logic and communication patterns under normal conditions.
+ *
+ * @see br.ufu.facom.ereno.benign.uc00.creator.GooseCreator
+ * @see br.ufu.facom.ereno.general.ProtectionIED
+ * @see br.ufu.facom.ereno.messages.Goose
  */
+
 public class LegitimateProtectionIED extends ProtectionIED {
     public LegitimateProtectionIED() {
         super(DatasetWriter.label[0]);
@@ -47,7 +58,6 @@ public class LegitimateProtectionIED extends ProtectionIED {
 
     @Override
     public void run(int normalMessages) {
-        // Here we set the GooseCreator for creating GOOSE messages for ProtectionIED
         messageCreator = new GooseCreator(getLabel());
         messageCreator.generate(this, normalMessages);
     }
@@ -204,9 +214,9 @@ public class LegitimateProtectionIED extends ProtectionIED {
         for (int i = 0; i < ied.getMessages().size(); i++) {
             if (goose.equals(ied.getMessages().get(i))) {
                 if (i == 0) {
-                    Goose pseudoPast = ied.getMessages().get(0).copy(); // Pseudo past
+                    Goose pseudoPast = ied.getMessages().get(0).copy();
                     double pseudoPastTimestamp = ied.getMessages().get(0).getTimestamp() - maxTime;
-                    pseudoPast.setTimestamp(pseudoPastTimestamp); //Assume the last message wast sent at now - maxtime
+                    pseudoPast.setTimestamp(pseudoPastTimestamp);
                     pseudoPast.setSqNum(pseudoPast.getSqNum() - 1);
                     return pseudoPast;
                 } else {

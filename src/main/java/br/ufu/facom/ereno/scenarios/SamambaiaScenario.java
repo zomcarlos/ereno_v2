@@ -28,6 +28,45 @@ import java.io.InputStream;
 import java.util.*;
 import java.util.logging.Logger;
 
+/**
+ * Represents the Samambaia scenario for IEC 61850 communication simulation.
+ *
+ * This class sets up and runs a simulated substation network environment including merging units,
+ * legitimate protection devices, and various attack devices, generating Sampled Values (SV) and GOOSE messages.
+ *
+ * Configuration parameters are loaded from 'params.properties', allowing customization of:
+ * - Dataset generation path and name
+ * - Number of messages to generate
+ * - Whether to generate ARFF or CSV datasets
+ * - Debug mode enabling detailed logging output
+ *
+ * The scenario supports a mix of legitimate and malicious devices, simulating attack behaviors such as:
+ * - Random replay
+ * - Inverse replay
+ * - Masquerade fake fault and normal states
+ * - Injection attacks
+ * - Gray hole attacks
+ *
+ * The scenario executes device setup, message generation, and dataset export,
+ * leveraging helper classes for writing output in ARFF, CSV, or debug formats.
+ *
+ * Usage example:
+ * <pre>{@code
+* substationNetwork.processLevelDevices.add(mu);
+* substationNetwork.bayLevelDevices.add(uc00);
+* substationNetwork.bayLevelDevices.add(attackIED);
+ * }</pre>
+ *
+ * @see br.ufu.facom.ereno.SubstationNetwork
+ * @see br.ufu.facom.ereno.general.ProtectionIED
+ * @see br.ufu.facom.ereno.benign.uc00.devices.LegitimateProtectionIED
+ * @see br.ufu.facom.ereno.attacks.uc01.devices.RandomReplayerIED
+ * @see br.ufu.facom.ereno.dataExtractors.ARFFWritter
+ * @see br.ufu.facom.ereno.dataExtractors.CSVWritter
+ * @see br.ufu.facom.ereno.dataExtractors.DebugWritter
+ */
+
+
 public class SamambaiaScenario implements IScenario {
 
     public static void main(String[] args) throws Exception {
@@ -68,14 +107,11 @@ public class SamambaiaScenario implements IScenario {
         Attacks.grayhole = false;
 
         try (InputStream input = GooseFlow.class.getClassLoader().getResourceAsStream(CONFIG_FILE)) {
-
             if (input == null) {
                 throw new RuntimeException(CONFIG_FILE + " not found in classpath");
             }
-
             props.load(input);
 
-            // Map properties to static fields
             generateArff = Boolean.parseBoolean(props.getProperty("scenario.generateArff", "false"));
             debug = Boolean.parseBoolean(props.getProperty("scenario.debug", "false"));
             path = props.getProperty("scenario.path");
@@ -87,7 +123,6 @@ public class SamambaiaScenario implements IScenario {
         } catch (NumberFormatException e) {
             throw new RuntimeException("Invalid number format in configuration", e);
         }
-
     }
 
     @Override
@@ -128,56 +163,38 @@ public class SamambaiaScenario implements IScenario {
 
     @Override
     public void runDevices() {
-        // Clear previous messages
+
         substationNetwork.processBusMessages.clear();
         substationNetwork.stationBusMessages.clear();
 
-        // Generate SV messages (only from MUs)
         for (MergingUnit mu : substationNetwork.processLevelDevices) {
             mu.getMessages().clear();
             mu.run(numberOfMessages);
             substationNetwork.processBusMessages.addAll(
-                    new ArrayList<>(mu.getMessages()) // Create new list to avoid sharing
+                    new ArrayList<>(mu.getMessages())
             );
         }
 
-        // Generate GOOSE messages with deduplication check
-        Set<String> messageSignatures = new HashSet<>();
         for (IED ied : substationNetwork.bayLevelDevices) {
             if (ied instanceof ProtectionIED) {
                 ProtectionIED protectionIED = (ProtectionIED) ied;
                 protectionIED.getMessages().clear();
                 protectionIED.run(numberOfMessages);
-
-                for (Goose goose : protectionIED.getMessages()) {
-                    String signature = createMessageSignature(goose);
-                    if (!messageSignatures.contains(signature) && !(ied instanceof LegitimateProtectionIED)) {
-                        messageSignatures.add(signature);
-                        substationNetwork.stationBusMessages.add(goose);
-                    }
+                if (!(ied instanceof LegitimateProtectionIED)) {
+                    substationNetwork.stationBusMessages.addAll(protectionIED.getMessages());
                 }
             }
         }
 
         Logger.getLogger("SamambaiaScenario").info(
-                String.format("Generated %d unique SV and %d unique GOOSE messages",
+                String.format("Generated %d SV and %d GOOSE messages",
                         substationNetwork.processBusMessages.size(),
                         substationNetwork.stationBusMessages.size())
         );
     }
 
-    private String createMessageSignature(Goose goose) {
-        return String.format("%.5f-%.5f-%d-%d-%d",
-                goose.getTimestamp(),
-                goose.getT(),
-                goose.getStNum(),
-                goose.getSqNum(),
-                goose.getCbStatus()
-        );
-    }
     @Override
     public void exportDataset() {
-        verifyMessageUniqueness();
         try {
             if (!debug) {
                 if (generateArff) {
@@ -199,17 +216,6 @@ public class SamambaiaScenario implements IScenario {
 
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }
-    }
-
-    private void verifyMessageUniqueness() {
-        Set<String> gooseSignatures = new HashSet<>();
-        for (EthernetFrame goose : substationNetwork.stationBusMessages) {
-            String sig = createMessageSignature((Goose) goose);
-            if (gooseSignatures.contains(sig)) {
-                Logger.getLogger("SamambaiaScenario").warning("Duplicate GOOSE message: " + sig);
-            }
-            gooseSignatures.add(sig);
         }
     }
 }
